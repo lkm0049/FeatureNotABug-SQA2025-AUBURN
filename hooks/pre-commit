@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Running Bandit security scan..."
+#Run bandit on all python files in repo and output to csv
+bandit -r . -f csv -o bandit_report.csv
+echo "Bandit scan complete. Results written to bandit_report.csv"
