@@ -12,6 +12,9 @@ import numpy as np
 import json
 from sarif_om import *
 from jschema_to_python.to_json import to_json
+#import myLogger
+import myLogger
+logObj = myLogger.giveMeLoggingObject()
 
 '''Global SarifLog Object definition and Rule definition for SLI-KUBE. Rule IDs are ordered by the sequence as it appears in the TOSEM paper'''
 
@@ -244,6 +247,9 @@ def scanSingleManifest( path_to_script ):
     While it is named as `scanSingleManifest` 
     it can only do taint tracking for secrets and over privileges 
     '''
+    #LOG 8: Show that the scanSingleManifest function is being called and scanning is starting.
+    logObj = myLogger.giveMeLoggingObject()
+    logObj.info("LOG 8: Starting scan of manifest: {}".format(path_to_script))
     checkVal = parser.checkIfValidK8SYaml( path_to_script )
     # print(checkVal) 
     # initializing 
@@ -321,7 +327,8 @@ def scanSingleManifest( path_to_script ):
     '''
     #valid_taint_privi  = scanForOverPrivileges( path_to_script )
     # print(valid_taint_privi) 
-
+    #LOG 9: Show that the scanSingleManifest function is complete and the results are being returned.
+    logObj.info("LOG 9: scanSingleManifest complete. Secrets found: {}".format(len(dict_secret)))
     return within_secret_, templ_secret_, valid_taint_secr 
 
 
@@ -632,6 +639,9 @@ def scanDockerSock(path_script ):
     return dic  
 
 def runScanner(dir2scan):
+    #LOG 10: Show that the scanner is starting to run on the specified directory.
+    logObj = myLogger.giveMeLoggingObject()
+    logObj.info("LOG 10: Running scanner on directory: {}".format(dir2scan))
     all_content   = [] 
     all_yml_files = getYAMLFiles(dir2scan)
     val_cnt       = 0 
@@ -640,6 +650,8 @@ def runScanner(dir2scan):
         Need to filter out `.github/workflows.yml files` first 
         '''
         if(parser.checkIfWeirdYAML ( yml_  )  == False): 
+            #LOG 11: Show that the scanner is processing a valid YAML file.
+            logObj.info("LOG 11: Analyzing file: {}".format(yml_))
             print ("\n\n--------------- FILE --------------\n\t-->",yml_)
             if( ( parser.checkIfValidK8SYaml( yml_ ) ) or (  parser.checkIfValidHelm( yml_ ) ) ) and parser.checkParseError( yml_) :
                 # print (" \n\n--------------- FILE RUNNING NOW---------------")
@@ -734,8 +746,8 @@ def runScanner(dir2scan):
 
         sarif_json = to_json(sarif_log)
         #print(sarif_json)       
-
-
+    #LOG 12: Show that the scanner has completed and the number of valid YAML files processed.
+    logObj.info("LOG 12: Scanner complete. Valid YAMLs: {}. SARIF ready.".format(val_cnt))
     return all_content, sarif_json
 
 
