@@ -24,3 +24,22 @@ Commands to Run:
     -v "$(pwd)/results:/results" \
     slikube
 
+Breakdown of Work Done:
+  - 4.a. Create a Git Hook that will run and report all security weaknesses in the project in a CSV file whenever a Python file is changed and committed.
+      - Hook created and present in the `hooks/` directory.
+  - 4.b. Create a fuzz.py file that will automatically fuzz 5 Python methods of your choice. Report any bugs you discovered by the `fuzz.py` file. `fuzz.py` will be automatically executed from GitHub actions.
+  - 4.c. Integrate forensics by modifying 5 Python methods of your choice.
+     - Files modified, with corresponding methods:
+         - `main.py`:
+           - `main()`
+           - `getCountFromAnalysis()`
+         - `parser.py`:
+           - `loadMultiYAML()`
+           - `checkParseError()`
+         - `scanner.py`:
+           - `scanSingleManifest()`
+           - `runScanner()`
+         - `graphtaint.py`:
+           - `getMatchingTemplates()`
+           - `getValidTaints()`
+    
