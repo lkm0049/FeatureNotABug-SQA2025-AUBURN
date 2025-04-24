@@ -14,6 +14,10 @@ import pathlib as pl
 import re
 import subprocess
 import os
+#import myLogger
+import myLogger
+logObj = myLogger.giveMeLoggingObject()
+
 
 #update basepath
 base_path = r" "
@@ -147,17 +151,26 @@ def checkParseError( path_script ):
             for dictionary in yaml.load_all(yml):
                 pass
         except ruamel.yaml.parser.ParserError as parse_error:
+            #LOG 7D: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7D: ParserError during validation in '{}': {}".format(path_script, parse_error))
             flag = False
             print(constants.YAML_SKIPPING_TEXT)           
         except ruamel.yaml.error.YAMLError as exc:
+            #LOG 7E: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7E: YAMLError during validation in '{}': {}".format(path_script, exc))
             flag = False
             print( constants.YAML_SKIPPING_TEXT  )    
         except UnicodeDecodeError as err_: 
+            #LOG 7F: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7F: UnicodeDecodeError during validation in '{}': {}".format(path_script, err_))
             flag = False
             print( constants.YAML_SKIPPING_TEXT  )
     return flag
 
 def loadMultiYAML( script_ ):
+    #LOG 6: Show that YAML files are being loaded, and which file is being loaded.
+    logObj = myLogger.giveMeLoggingObject()
+    logObj.info("LOG 6: Attempting to load and parse YAML file: {}".format(script_))
     dicts2ret = []  
     with open(script_, constants.FILE_READ_FLAG  ) as yml_content :
         yaml = ruamel.yaml.YAML()
@@ -167,11 +180,18 @@ def loadMultiYAML( script_ ):
                 # print('='*25)
                 # print(d_)
                 dicts2ret.append( d_ )
+
         except ruamel.yaml.parser.ParserError as parse_error:
+            #LOG 7A: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7A: ParserError while loading YAML: {}".format(parse_error))
             print(constants.YAML_SKIPPING_TEXT)           
         except ruamel.yaml.error.YAMLError as exc:
+            #LOG 7B: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7B: General YAMLError in '{}': {}".format(script_, exc))
             print( constants.YAML_SKIPPING_TEXT  )    
         except UnicodeDecodeError as err_: 
+            #LOG 7C: Show that the YAML file could not be parsed and why.
+            logObj.warning("LOG 7C: UnicodeDecodeError in '{}': {}".format(script_, err_))
             print( constants.YAML_SKIPPING_TEXT  )
         
         path = find_json_path_keys(dicts2ret)
