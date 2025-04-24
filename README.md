@@ -7,6 +7,7 @@ Team Members: Liam Maher, Trey Edmondson
 Notes:
 - To make the project run as intended, the provided Dockerfile and environment.yml had to be slightly modified.  We have included those updated files here.  They are not included in the `KubeSec-master/` directory, as we wanted to keep the submission documents in one place.
 - The precommit git hook that is required, is included in the `hooks/` directory, to make it easier to view the usage.
+- Screenshots of successful execution have been included in the `screenshots/` directory.
 
 Results and Scripts:
 - Included in the `KubeSec-master/` directory are the scripts that were modified for this project.
