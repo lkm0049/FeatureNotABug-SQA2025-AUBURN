@@ -8,8 +8,15 @@ import pandas as pd
 import constants
 import typer
 from pathlib import Path
+#import myLogger
+import myLogger
+logObj = myLogger.giveMeLoggingObject()
+
 
 def getCountFromAnalysis(ls_):
+    #LOG 4: Show that the analysis is being performed on the scanner results
+    logObj = myLogger.giveMeLoggingObject()
+    logObj.info("LOG 4: Analyzing result tuples from scanner output")
     list2ret           = []
     for tup_ in ls_:
         within_sec_cnt = 0 
@@ -45,6 +52,8 @@ def getCountFromAnalysis(ls_):
         helm_flag      = tup_[22]
 
         list2ret.append(  ( dir_name, script_name, within_sec_cnt, len(taint_secret), len(privilege_dic), len(http_dict), len(secuContextDic), len(nSpaceDict), len(absentResoDict), len(rollUpdateDic), len(netPolicyDict), len(pidfDict), len(ipcDict), len(dockersockDic), len(hostNetDict), len(cap_sys_dic), len(host_alias_dic), len(allow_priv_dic), len(unconfined_dic), len(cap_module_dic) , k8s_flag, helm_flag  )  )
+        #LOG 5:  Show that getCountFromAnalysis is complete and then list the number of entries returned.
+        logObj.info("LOG 5: getCountFromAnalysis completed. {} entries returned.".format(len(list2ret)))
     return list2ret
 
 
@@ -54,15 +63,21 @@ def main(directory: Path = typer.Argument(..., exists=True, help="Absolute path 
     Run KubeSec in a Kubernetes directory and get results in a CSV file.
 
     """
+    #LOG 1: Show that it is beginning the analysis and on which directory
+    logObj.info("LOG 1: Starting KubeSec analysis on directory: {}".format(directory))
     content_as_ls, sarif_json   = scanner.runScanner( directory )
     
     with open("SLIKUBE.sarif", "w") as f:
       f.write(sarif_json)
+      #LOG 2: Show that the sarif file has been created
+      logObj.info("LOG 2: SARIF output saved to SLIKUBE.sarif")
 
     df_all          = pd.DataFrame( getCountFromAnalysis( content_as_ls ) )
     outfile = Path(directory, "slikube_results.csv")
 
     df_all.to_csv( outfile, header= constants.CSV_HEADER , index=False, encoding= constants.CSV_ENCODING )
+    #LOG 3: Show that the CSV file has been created.
+    logObj.info("LOG 3: CSV results saved to {}".format(outfile))
 
 
 if __name__ == '__main__':
@@ -70,7 +85,7 @@ if __name__ == '__main__':
     '''
     DO NOT DELETE ALL IN K8S_REPOS AS TAINT TRACKING RELIES ON BASH SCRIPTS, ONE OF THE STRENGTHS OF THE TOOL 
     '''
-    ORG_DIR         = './TEST_ARTIFACTS/'
+    ORG_DIR         = '../home/TEST_ARTIFACTS/'
     OUTPUT_FILE_CSV = './PROJECT_MAIN_OUTPUT.csv'
 
     # ORG_DIR         = '/Users/arahman/K8S_REPOS/GITLAB_REPOS/'
@@ -82,6 +97,9 @@ if __name__ == '__main__':
 
     # take sarif_json from scanner
     typer.run(main)
+
+
+
 
 
 
