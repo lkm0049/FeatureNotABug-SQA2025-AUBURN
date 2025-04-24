@@ -1,17 +1,18 @@
-# myLogger.py
 import logging
+import os
 
-def get_logger(name='kubesec-logger', log_file='forensics.log'):
-    logger = logging.getLogger(name)
-
-    # Prevent duplicate handlers if this function is called multiple times
-    if not logger.handlers:
-        logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(formatter)
-
-        logger.addHandler(file_handler)
-
-    return logger
+def giveMeLoggingObject():
+    format_str = '%(asctime)s - %(levelname)s - %(funcName)s - %(message)s'
+    file_name = '/results/forensic_logger.log'
+    
+    # Setup global logging configuration
+    logging.basicConfig(
+        format=format_str,
+        filename=file_name,
+        level=logging.INFO,
+        filemode='a'  # Append to the log file
+    )
+    
+    # Creating and returning the logger object
+    loggerObj = logging.getLogger('forensic-logger')
+    return loggerObj
