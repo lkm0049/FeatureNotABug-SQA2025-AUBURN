@@ -4,7 +4,7 @@ import scanner
 def fuzzer():
 
     #Fuzzing graphtaint's constructHelmString function with a tuple not of size 3
-    #upper_key, key, _ = hiera_tuple does not verify integrity of the tuple before attempting to assign it's value
+    #upper_key, key, _ = hiera_tuple does not verify integrity of the tuple before attempting to assign it
     print("Fuzzing graphtaint's constructHelmString function with a tuple not of size 3")
     try:
         print(graphtaint.constructHelmString(('only', 'two')))
@@ -51,3 +51,6 @@ def fuzzer():
         passwords = scanner.scanPasswords('passwd', None)
     except Exception as e:
         print(f"Error: {e}")
+
+if __name__ == '__main__':
+    fuzzer()
