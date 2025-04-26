@@ -31,7 +31,7 @@ jobs:
         working-directory: KubeSec-master
         run: |
           # Run fuzz.py and capture stdout into a file
-          python fuzz.py > fuzz_output.txt
+          python fuzz.py >> fuzz_output.txt 2>&1
 
       - name: Display contents of fuzz_output.txt
         run: |
