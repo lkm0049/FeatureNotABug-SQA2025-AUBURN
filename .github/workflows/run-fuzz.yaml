@@ -27,7 +27,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run fuzz tests
+      - name: Run fuzz tests and capture output
         working-directory: KubeSec-master
         run: |
-          python fuzz.py
+          # Run fuzz.py and capture stdout into a file
+          python fuzz.py > fuzz_output.txt
+
+      - name: Upload fuzz output
+        uses: actions/upload-artifact@v3
+        with:
+          name: fuzz-output
+          path: KubeSec-master/results/fuzz_output.txt
