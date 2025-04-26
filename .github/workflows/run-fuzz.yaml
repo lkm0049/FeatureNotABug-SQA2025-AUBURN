@@ -31,8 +31,8 @@ jobs:
         working-directory: KubeSec-master
         run: |
           echo "Running fuzz.py..." > fuzz_output.txt
-          python fuzz.py > fuzz_output.txt
-          echo "Finished running fuzz.py." > fuzz_output.txt
+          python fuzz.py >> fuzz_output.txt
+          echo "Finished running fuzz.py." >> fuzz_output.txt
 
       - name: Display contents of fuzz_output.txt
         run: |
