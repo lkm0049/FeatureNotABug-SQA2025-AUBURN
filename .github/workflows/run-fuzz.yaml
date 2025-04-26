@@ -34,7 +34,7 @@ jobs:
           python fuzz.py > fuzz_output.txt
 
       - name: Upload fuzz output
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: fuzz-output
           path: KubeSec-master/results/fuzz_output.txt
