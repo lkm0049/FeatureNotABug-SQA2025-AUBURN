@@ -1,5 +1,4 @@
-from graphtaint import constructHelmString
-from graphtaint import getValidTaints
+import graphtaint
 import scanner
 
 def fuzzer():
@@ -7,12 +6,12 @@ def fuzzer():
     #Fuzzing graphtaint's constructHelmString function with a tuple not of size 3
     #upper_key, key, _ = hiera_tuple does not verify integrity of the tuple before attempting to assign it
     try:
-        print(constructHelmString(('only', 'two')))
+        print(graphtaint.constructHelmString(('only', 'two')))
     except Exception as e:
         print(f"Error: {e}")
 
     try:
-        print(constructHelmString(('is', 'one', 'too', 'many')))
+        print(graphtaint.constructHelmString(('is', 'one', 'too', 'many')))
     except Exception as e:
         print(f"Error: {e}")
 
@@ -26,10 +25,12 @@ def fuzzer():
     #Fuzzing graphtaint's getValidTaints function with a tuple of not size two
     #script_name, helm_string = match does not verify integrity of the tuple before assigning it
     try:
-        script_name, helmstring = getValidTaints(("one", "too", "many"))
-    except:
+        script_name, helmstring = graphtaint.getValidTaints(("one", "too", "many"))
+    except Exception as e:
         print(f"Error: {e}")
     try:
-        script_name, helmstring = getValidTaints(("notenough"))
-    except:
+        script_name, helmstring = graphtaint.getValidTaints(("notenough"))
+    except Exception as e:
         print(f"Error: {e}")
+
+    #names = scanner.scanUserName('user', 'notalist')
