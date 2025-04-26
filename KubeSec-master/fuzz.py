@@ -3,8 +3,9 @@ import scanner
 
 def fuzzer():
 
-    print("Fuzzing graphtaint's constructHelmString function with a tuple not of size 3")
+    #Fuzzing graphtaint's constructHelmString function with a tuple not of size 3
     #upper_key, key, _ = hiera_tuple does not verify integrity of the tuple before attempting to assign it
+    print("Fuzzing graphtaint's constructHelmString function with a tuple not of size 3")
     try:
         print(graphtaint.constructHelmString(('only', 'two')))
     except Exception as e:
