@@ -33,8 +33,7 @@ jobs:
           # Run fuzz.py and capture stdout into a file
           python fuzz.py > fuzz_output.txt
 
-      - name: Upload fuzz output
-        uses: actions/upload-artifact@v4
-        with:
-          name: fuzz-output
-          path: KubeSec-master/results/fuzz_output.txt
+      - name: Display contents of fuzz_output.txt
+        run: |
+          echo "Contents of fuzz_output.txt:"
+          cat KubeSec-master/fuzz_output.txt
