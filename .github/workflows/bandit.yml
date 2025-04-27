@@ -1,0 +1,34 @@
+name: Bandit security scan
+
+# only fire when a .py file is in the push
+on:
+  push:
+    paths:
+      - '**/*.py'
+
+jobs:
+  bandit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Make our hook executable
+        run: chmod +x .githooks/pre-commit
+
+      - name: Run our pre-commit Bandit hook
+        run: ./.githooks/pre-commit
+
+      - name: Upload Bandit report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit-report
+          path: KubeSec-master/results/bandit_report.csv
