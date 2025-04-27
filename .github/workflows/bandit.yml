@@ -21,7 +21,7 @@ jobs:
         run: |
           chmod +x .githooks/pre-commit
           mkdir -p .git/hooks
-          cp .githooks/hooks/pre-commit .git/hooks/pre-commit
+          cp .githooks/pre-commit .git/hooks/pre-commit
 
       - name: Run pre-commit hook (Bandit)
         run: .git/hooks/pre-commit
