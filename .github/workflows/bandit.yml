@@ -1,34 +1,29 @@
 name: Bandit security scan
 
-# only fire when a .py file is in the push
 on:
   push:
+    # fire only when a .py file changes, but ignore updates under results/
     paths:
       - '**/*.py'
+    paths-ignore:
+      - 'KubeSec-master/results/**'
 
 jobs:
   bandit:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Run full Bandit scan
+        run: |
+          mkdir -p KubeSec-master/results
+          bandit -r . -f csv -o KubeSec-master/results/bandit_report.csv
+
+      - name: Commit Bandit report back to main
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          python-version: '3.x'
-
-      - name: Install Bandit
-        run: pip install bandit
-
-      - name: Make our hook executable
-        run: chmod +x .githooks/pre-commit
-
-      - name: Run our pre-commit Bandit hook
-        run: ./.githooks/pre-commit
-
-      - name: Upload Bandit report
-        uses: actions/upload-artifact@v4
-        with:
-          name: bandit-report
-          path: KubeSec-master/results/bandit_report.csv
+          commit_message: "ci: update Bandit report for ${{ github.sha }}"
+          file_pattern: "KubeSec-master/results/bandit_report.csv"
+          branch: main
