@@ -14,20 +14,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ensure results dir exists
+      - name: Ensure results directory exists
         run: mkdir -p KubeSec-master/results
 
-      - name: Install your hook
+      - name: Install pre-commit hook
         run: |
           chmod +x .github/hooks/pre-commit
           mkdir -p .git/hooks
           cp .github/hooks/pre-commit .git/hooks/pre-commit
 
-      - name: Run pre-commit hook
+      - name: Run pre-commit hook (Bandit)
         run: .git/hooks/pre-commit
 
       - name: Commit Bandit report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "ci: update Bandit report"
-          file_pattern: "KubeSec-master/results/bandit_report.csv
+          file_pattern: "KubeSec-master/results/bandit_report.csv"
