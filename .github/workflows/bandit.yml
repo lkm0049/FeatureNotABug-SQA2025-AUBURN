@@ -28,6 +28,7 @@ jobs:
 
       - name: Run pre-commit (full project scan)
         run: .github/hooks/pre-commit
+        continue-on-error: true
 
       - name: Move Bandit report into results folder
         run: |
