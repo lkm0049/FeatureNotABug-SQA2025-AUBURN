@@ -19,9 +19,9 @@ jobs:
 
       - name: Install pre-commit hook
         run: |
-          chmod +x .github/hooks/pre-commit
+          chmod +x .githooks/pre-commit
           mkdir -p .git/hooks
-          cp .github/hooks/pre-commit .git/hooks/pre-commit
+          cp .githooks/hooks/pre-commit .git/hooks/pre-commit
 
       - name: Run pre-commit hook (Bandit)
         run: .git/hooks/pre-commit
