@@ -5,6 +5,7 @@ Team Name:  Feature Not A Bug </br>
 Team Members: Liam Maher, Trey Edmondson
 
 Notes:
+- Important:  The Github Actions for Bandit was not required in the instructions, all edits made after the deadline were me trying to get it to work just out of curiosity.  Nothing else was modified after the deadline besides the GitHub Actions for the Bandit Pre-commit.
 - To make the project run as intended, the provided Dockerfile and environment.yml had to be slightly modified.  We have included those updated files here.  They are not included in the `KubeSec-master/` directory, as we wanted to keep the submission documents in one place.
 - The precommit git hook that is required, is included in the `hooks/` directory, to make it easier to view the usage.
 - Screenshots of successful execution have been included in the `screenshots/` directory.
