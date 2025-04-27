@@ -11,10 +11,10 @@ fi
 echo "Python files changed — running full Bandit scan…"
 
 # ensure our results dir exists
-mkdir -p results
+mkdir -p KubeSec-master/results
 
 # scan entire project (.) and write CSV
-bandit -r . -f csv -o results/bandit_report.csv
+bandit -r . -f csv -o KubeSec-master/results/bandit_report.csv
 
 # exit so commit proceeds
 exit 0
