@@ -1,6 +1,6 @@
 import graphtaint
 import scanner
-
+   
 def fuzzer():
 
     #Fuzzing graphtaint's constructHelmString function with a tuple not of size 3
