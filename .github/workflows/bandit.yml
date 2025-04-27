@@ -28,7 +28,7 @@ jobs:
         run: ./.githooks/pre-commit
 
       - name: Upload Bandit report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bandit-report
           path: KubeSec-master/results/bandit_report.csv
