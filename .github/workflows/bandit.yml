@@ -1,29 +1,43 @@
-name: Bandit security scan
+# .github/workflows/bandit.yml
+name: Bandit scan & commit report
 
 on:
   push:
-    # fire only when a .py file changes, but ignore updates under results/
+    # only trigger when at least one .py file changes
     paths:
       - '**/*.py'
-    paths-ignore:
-      - 'KubeSec-master/results/**'
+
+permissions:
+  contents: write     # allow the action to push back
 
 jobs:
   bandit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout code & keep token
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
-      - name: Run full Bandit scan
+      - name: Point Git at our committed hook
+        run: git config core.hooksPath .github/hooks
+
+      - name: Make hook executable
+        run: chmod +x .github/hooks/pre-commit
+
+      - name: Run pre-commit (full project scan)
+        run: .github/hooks/pre-commit
+
+      - name: Move Bandit report into results folder
         run: |
           mkdir -p KubeSec-master/results
-          bandit -r . -f csv -o KubeSec-master/results/bandit_report.csv
+          mv bandit_report.csv KubeSec-master/results/
 
-      - name: Commit Bandit report back to main
+      - name: Auto-commit updated report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "ci: update Bandit report for ${{ github.sha }}"
+          commit_message: "chore: update Bandit report"
           file_pattern: "KubeSec-master/results/bandit_report.csv"
-          branch: main
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
