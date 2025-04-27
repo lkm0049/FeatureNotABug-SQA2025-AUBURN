@@ -25,10 +25,4 @@ jobs:
 
       - name: Run pre-commit hook (Bandit)
         run: .git/hooks/pre-commit
-        continue-on-error: true      # ← add this
 
-      - name: Commit Bandit report
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "ci: update Bandit report"
-          file_pattern: "KubeSec-master/results/bandit_report.csv"
