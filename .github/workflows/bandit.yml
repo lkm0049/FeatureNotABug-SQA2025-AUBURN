@@ -1,44 +1,36 @@
 # .github/workflows/bandit.yml
-name: Bandit scan & commit report
+name: Bandit via pre-commit
 
 on:
   push:
-    # only trigger when at least one .py file changes
     paths:
       - '**/*.py'
 
-permissions:
-  contents: write     # allow the action to push back
-
 jobs:
-  bandit:
+  security-scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code & keep token
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          fetch-depth: 0         # get full history so hooks can see diffs
 
-      - name: Point Git at our committed hook
-        run: git config core.hooksPath .github/hooks
+      - name: Ensure results folder exists
+        run: mkdir -p KubeSec-master/results
 
-      - name: Make hook executable
-        run: chmod +x .github/hooks/pre-commit
-
-      - name: Run pre-commit (full project scan)
-        run: .github/hooks/pre-commit
-        continue-on-error: true
-
-      - name: Move Bandit report into results folder
+      - name: Install your pre-commit hook
         run: |
-          mkdir -p KubeSec-master/results
-          mv bandit_report.csv KubeSec-master/results/
+          chmod +x .github/hooks/pre-commit
+          mkdir -p .git/hooks
+          cp .github/hooks/pre-commit .git/hooks/pre-commit
 
-      - name: Auto-commit updated report
+      - name: Run pre-commit hook
+        run: |
+          echo "Invoking pre-commit hook…"
+          .git/hooks/pre-commit
+
+      - name: Commit Bandit report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: update Bandit report"
-          file_pattern: "KubeSec-master/results/bandit_report.csv"
-          author_name: github-actions[bot]
-          author_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "ci: update Bandit report"
+          file_pattern: KubeSec-master/results/bandit_report.csv
