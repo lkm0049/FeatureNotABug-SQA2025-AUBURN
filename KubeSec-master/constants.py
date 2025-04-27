@@ -2,7 +2,7 @@
 Akond Rahman 
 April 30, 2021 
 Placeholder for constants for KubeTaint
-Test GitHook 
+Test GitHoo
 '''
 
 FILE_READ_FLAG               = 'r'
